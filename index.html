@@ -13,7 +13,14 @@
     </form>
     <p>Generated text:</p>
     <p id="generated-text"></p>
+    <script src="https://cdn.jsdelivr.net/npm/dotenv@8.2.0/lib/main.js"></script>
     <script>
+      // Load environment variables from the .env file
+      const result = dotenv.config();
+      if (result.error) {
+        throw result.error;
+      }
+
       function generate() {
         // Get the prompt entered by the user
         const prompt = document.getElementById('prompt').value;
@@ -23,22 +30,13 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer + process.env.OPENAI_API_KEY'
+            'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY
           },
           body: JSON.stringify({
             prompt: prompt
           })
         })
-        .then(response => response.json())
-        .then(data => {
-          // Update the page with the generated text
-          const generatedText = document.getElementById('generated-text');
-          generatedText.textContent = data.text;
-        })
-        .catch(error => {
-          // Handle any errors
-          console.error(error);
-        });
+        // ...
       }
     </script>
   </body>
