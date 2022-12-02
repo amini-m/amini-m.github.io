@@ -6,10 +6,40 @@
   <body>
     <h1>Welcome to my OpenAI API Landing Page</h1>
     <p>Here you can use the OpenAI API to generate text or complete tasks.</p>
-    <form method="post" action="/generate">
+    <form>
       <label>Enter your prompt:</label><br>
-      <input type="text" name="prompt"><br><br>
-      <input type="submit" value="Generate">
+      <input type="text" id="prompt"><br><br>
+      <input type="button" value="Generate" onclick="generate()">
     </form>
+    <p>Generated text:</p>
+    <p id="generated-text"></p>
+    <script>
+      function generate() {
+        // Get the prompt entered by the user
+        const prompt = document.getElementById('prompt').value;
+
+        // Make a request to the OpenAI API using the prompt
+        fetch('https://api.openai.com/v1/text-generator', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer + process.env.OPENAI_API_KEY'
+          },
+          body: JSON.stringify({
+            prompt: prompt
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Update the page with the generated text
+          const generatedText = document.getElementById('generated-text');
+          generatedText.textContent = data.text;
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error(error);
+        });
+      }
+    </script>
   </body>
 </html>
